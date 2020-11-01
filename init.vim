@@ -75,10 +75,11 @@ set path+=**
 " theme & colors
 set termguicolors   " enable true color mode
 syntax enable       " enable syntax highlighting
+let g:vimsyn_embed = 'l'    " enable highlighting of lua code embedded in vimscript files
 set background=dark
-let g:palenight_terminal_italics = 1
-let g:gruvbox_italic = 1
-let g:gruvbox_contrast_dark = 'hard'
+"let g:palenight_terminal_italics = 1
+"let g:gruvbox_italic = 1
+"let g:gruvbox_contrast_dark = 'hard'
 colorscheme dracula
 
 " lightline customization
@@ -115,7 +116,9 @@ lsp.vimls.setup{on_attach=on_attach}
 
 -- treesitter setup
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+    ensure_installed = "maintained", -- one of "all", 
+                                     -- "maintained" (parsers with maintainers), 
+                                     -- or a list of languages
     highlight = {
         enable = false, -- false will disable the whole extension
         disable = {},  -- list of languages to disable
