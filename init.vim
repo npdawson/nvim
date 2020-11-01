@@ -9,8 +9,14 @@ Plug 'nvim-lua/completion-nvim'
 "Plug 'nvim-lua/lsp-status.nvim' " TODO: configure status line to include additional information
 "Plug 'nvim-lua/diagnostic-nvim'
 
+" fancy parser generator for colorful highlighting
+Plug 'nvim-treesitter/nvim-treesitter'
+
 " themes
 Plug 'drewtempelmeyer/palenight.vim'
+Plug 'glepnir/zephyr-nvim'
+Plug 'gruvbox-community/gruvbox'
+Plug 'dracula/vim',{'as':'dracula'}
 
 " git
 Plug 'tpope/vim-fugitive'
@@ -29,19 +35,26 @@ set shiftwidth=4    " number of spaces to use for autoindent
 set expandtab       " use spaces instead of tabs
 set autoindent
 set smartindent     " does the right thing (mostly)
-set cindent         " stricter rules for C programs
 set copyindent      " copy indent from the previous line
-set cino=t0,(0      " t0 - Indent a function return type declaration in column 0.
+set cindent         " stricter rules for C programs
+set cino=t0,(0,=0   " t0 - Indent a function return type declaration in column 0.
                     "      (default 'shiftwidth').
                     " (0 - When in unclosed parentheses, line up subsequent
                     "      lines with the first non-white character after the 
                     "      unclosed parentheses.
+                    " =0 - Place statements occurring after a case label 0 characters from
+                    "      the indent of the label.  (default 'shiftwidth').
+
 
 " UI stuff
 set hidden
 set cursorline      " highlight current line
 set showmatch       " highlight matching brace
 set mouse=a         " enable the mouse in all modes
+if (exists('+colorcolumn')) " set column 100 to a different color to indicate 'max' line length
+    set colorcolumn=100
+    highlight ColorColumn ctermbg=9
+endif
 
 " tweaks for file browsing
 let g:netrw_banner=0        " disable annoying banner
@@ -63,20 +76,35 @@ set path+=**
 set termguicolors   " enable true color mode
 syntax enable       " enable syntax highlighting
 set background=dark
-colorscheme palenight
-let g:lightline = { 'colorscheme': 'palenight' }
+let g:palenight_terminal_italics = 1
+let g:gruvbox_italic = 1
+let g:gruvbox_contrast_dark = 'hard'
+colorscheme dracula
+
+" lightline customization
+let g:lightline = { 
+                \ 'colorscheme': 'dracula',
+                \ 'active': {
+                \   'left': [ [ 'mode', 'paste' ],
+                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+                \ },
+                \ 'component_function': {
+                \   'gitbranch': 'FugitiveHead'
+                \ },
+                \ }
 
 " leader key
 let g:mapleader = "\<Space>"
 
 " turn off search highlights
-nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <silent> <leader><space> :nohlsearch<CR>
 " some other nice leader shortcuts
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
 
-" LSP servers
+" Lua stuff
 lua << EOF
+-- LSP servers
 local lsp = require'nvim_lsp'
 local on_attach = function(client)
     require'completion'.on_attach(client)
@@ -84,6 +112,18 @@ local on_attach = function(client)
 end
 lsp.ccls.setup{on_attach=on_attach}
 lsp.vimls.setup{on_attach=on_attach}
+
+-- treesitter setup
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+    highlight = {
+        enable = false, -- false will disable the whole extension
+        disable = {},  -- list of languages to disable
+    },
+}
+
+-- zephyr setup
+--require('zephyr').get_zephyr_color()
 EOF
 
 " LSP shortcuts
