@@ -11,6 +11,8 @@ Plug 'nvim-lua/completion-nvim'
 
 " fancy parser generator for colorful highlighting
 Plug 'nvim-treesitter/nvim-treesitter'
+" less fancy way for colorful highlighting of C++ code
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 
 " fuzzy finder
 Plug 'junegunn/fzf.vim'
@@ -133,7 +135,14 @@ local on_attach = function(client)
     require'completion'.on_attach(client)
 --    require'diagnostic'.on_attach(client)
 end
-lsp.ccls.setup{on_attach=on_attach}
+lsp.ccls.setup{
+    on_attach=on_attach,
+    init_options = {
+        highlight = {
+            lsRanges = true;
+        }
+    }
+}
 lsp.vimls.setup{on_attach=on_attach}
 
 -- treesitter setup
