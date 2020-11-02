@@ -12,6 +12,10 @@ Plug 'nvim-lua/completion-nvim'
 " fancy parser generator for colorful highlighting
 Plug 'nvim-treesitter/nvim-treesitter'
 
+" fuzzy finder
+Plug 'junegunn/fzf.vim'
+Plug 'jremmen/vim-ripgrep'
+
 " themes
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'glepnir/zephyr-nvim'
@@ -24,6 +28,12 @@ Plug 'airblade/vim-gitgutter'
 
 " status bar
 Plug 'itchyny/lightline.vim'
+
+" more awesome tpope plugins
+Plug 'tpope/vim-commentary'     " shortcuts for commenting lines
+Plug 'tpope/vim-apathy'         " sets path options to nice defaults
+Plug 'tpope/vim-unimpaired'     " shortcuts that come in pairs
+Plug 'tpope/vim-surround'       " keybinds that change surrounding characters []{}()etc.
 
 " Initialize plugin system
 call plug#end()
@@ -41,19 +51,21 @@ set cino=t0,(0,=0   " t0 - Indent a function return type declaration in column 0
                     "      (default 'shiftwidth').
                     " (0 - When in unclosed parentheses, line up subsequent
                     "      lines with the first non-white character after the 
-                    "      unclosed parentheses.
+                    "      unclosed parentheses.  (default 'shiftwidth' * 2).
                     " =0 - Place statements occurring after a case label 0 characters from
                     "      the indent of the label.  (default 'shiftwidth').
 
 
 " UI stuff
 set hidden
+set updatetime=100  " 100ms instead of the default 4000, as recommended by gitgutter
+set signcolumn=yes  " always show, otherwise gitgutter et al will shift the text
 set cursorline      " highlight current line
 set showmatch       " highlight matching brace
 set mouse=a         " enable the mouse in all modes
 if (exists('+colorcolumn')) " set column 100 to a different color to indicate 'max' line length
     set colorcolumn=100
-    highlight ColorColumn ctermbg=9
+    "highlight ColorColumn ctermbg=9
 endif
 
 " tweaks for file browsing
@@ -70,7 +82,7 @@ set smartcase       " but only when it's all lowercase
 
 " finding files
 " search into subfolders
-set path+=**
+"set path+=**
 
 " theme & colors
 set termguicolors   " enable true color mode
@@ -80,28 +92,38 @@ set background=dark
 "let g:palenight_terminal_italics = 1
 "let g:gruvbox_italic = 1
 "let g:gruvbox_contrast_dark = 'hard'
+"let g:dracula_colorterm = 0 " unset background color to enable transparency
 colorscheme dracula
 
 " lightline customization
 let g:lightline = { 
-                \ 'colorscheme': 'dracula',
-                \ 'active': {
-                \   'left': [ [ 'mode', 'paste' ],
-                \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-                \ },
-                \ 'component_function': {
-                \   'gitbranch': 'FugitiveHead'
-                \ },
-                \ }
+            \      'colorscheme': 'dracula',
+            \      'active': {
+            \      'left': [ [ 'mode', 'paste' ],
+            \                [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+            \      },
+            \      'component_function': {
+            \      'gitbranch': 'FugitiveHead'
+            \      },
+            \ }
 
 " leader key
 let g:mapleader = "\<Space>"
-
 " turn off search highlights
 nnoremap <silent> <leader><space> :nohlsearch<CR>
+" fugitive shortcuts
+nmap <leader>gs :G<CR>
+nmap <leader>gh :diffget //3<CR>
+nmap <leader>gu :diffget //2<CR>
+" fzf shortcuts
+nnoremap <C-p> :Files<CR>
+nnoremap <C-g> :GFiles<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <C-f> :Rg
 " some other nice leader shortcuts
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
+nnoremap <leader>x :x<CR>
 
 " Lua stuff
 lua << EOF
