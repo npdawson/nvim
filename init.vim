@@ -10,7 +10,7 @@ Plug 'nvim-lua/completion-nvim'
 "Plug 'nvim-lua/diagnostic-nvim'
 
 " fancy parser generator for colorful highlighting
-Plug 'nvim-treesitter/nvim-treesitter'
+"Plug 'nvim-treesitter/nvim-treesitter'
 " less fancy way for colorful highlighting of C++ code
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 
@@ -36,6 +36,10 @@ Plug 'tpope/vim-commentary'     " shortcuts for commenting lines
 Plug 'tpope/vim-apathy'         " sets path options to nice defaults
 Plug 'tpope/vim-unimpaired'     " shortcuts that come in pairs
 Plug 'tpope/vim-surround'       " keybinds that change surrounding characters []{}()etc.
+
+" ca65 syntax
+Plug 'maxbane/vim-asm_ca65'
+"Plug 'zorchenhimer/vim-ca65'
 
 " Initialize plugin system
 call plug#end()
@@ -130,7 +134,7 @@ nnoremap <leader>x :x<CR>
 " Lua stuff
 lua << EOF
 -- LSP servers
-local lsp = require'nvim_lsp'
+local lsp = require'lspconfig'
 local on_attach = function(client)
     require'completion'.on_attach(client)
 --    require'diagnostic'.on_attach(client)
@@ -146,15 +150,15 @@ lsp.ccls.setup{
 lsp.vimls.setup{on_attach=on_attach}
 
 -- treesitter setup
-require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained", -- one of "all", 
-                                     -- "maintained" (parsers with maintainers), 
-                                     -- or a list of languages
-    highlight = {
-        enable = false, -- false will disable the whole extension
-        disable = {},  -- list of languages to disable
-    },
-}
+--require'nvim-treesitter.configs'.setup {
+--    ensure_installed = "maintained", -- one of "all", 
+--                                     -- "maintained" (parsers with maintainers), 
+--                                     -- or a list of languages
+--    highlight = {
+--        enable = false, -- false will disable the whole extension
+--        disable = {},  -- list of languages to disable
+--    },
+--}
 
 -- zephyr setup
 --require('zephyr').get_zephyr_color()
@@ -185,3 +189,9 @@ set completeopt=menuone,noinsert,noselect
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 " avoid showing message extra message when using completion
 set shortmess+=c
+
+" use ca65 syntax in .s and .inc files by default
+filetype plugin indent on
+augroup filetypedetect
+    au BufnewFile,BufRead *.s,*.inc set ft=asm_ca65
+augroup end
