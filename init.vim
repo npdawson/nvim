@@ -10,7 +10,7 @@ Plug 'nvim-lua/completion-nvim'
 "Plug 'nvim-lua/diagnostic-nvim'
 
 " fancy parser generator for colorful highlighting
-"Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " less fancy way for colorful highlighting of C++ code
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 
@@ -156,15 +156,15 @@ lsp.vimls.setup{on_attach=on_attach}
 lsp.gdscript.setup{on_attach=on_attach}
 
 -- treesitter setup
---require'nvim-treesitter.configs'.setup {
---    ensure_installed = "maintained", -- one of "all", 
---                                     -- "maintained" (parsers with maintainers), 
---                                     -- or a list of languages
---    highlight = {
---        enable = false, -- false will disable the whole extension
---        disable = {},  -- list of languages to disable
---    },
---}
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = "maintained", -- one of "all", 
+                                     -- "maintained" (parsers with maintainers), 
+                                     -- or a list of languages
+    highlight = {
+        enable = true, -- false will disable the whole extension
+        disable = {},  -- list of languages to disable
+    },
+}
 
 -- zephyr setup
 --require('zephyr').get_zephyr_color()
