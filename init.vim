@@ -41,6 +41,9 @@ Plug 'tpope/vim-surround'       " keybinds that change surrounding characters []
 Plug 'maxbane/vim-asm_ca65'
 "Plug 'zorchenhimer/vim-ca65'
 
+" godot integration
+Plug 'habamax/vim-godot'
+
 " Initialize plugin system
 call plug#end()
 
@@ -61,6 +64,8 @@ set cino=t0,(0,=0   " t0 - Indent a function return type declaration in column 0
                     " =0 - Place statements occurring after a case label 0 characters from
                     "      the indent of the label.  (default 'shiftwidth').
 
+" default to having all folds open
+set foldlevelstart=99
 
 " UI stuff
 set hidden
@@ -148,6 +153,7 @@ lsp.ccls.setup{
     }
 }
 lsp.vimls.setup{on_attach=on_attach}
+lsp.gdscript.setup{on_attach=on_attach}
 
 -- treesitter setup
 --require'nvim-treesitter.configs'.setup {
